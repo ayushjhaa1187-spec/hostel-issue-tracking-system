@@ -13,9 +13,8 @@ const Dashboard = ({ user, onLogout }) => {
   const [location, setLocation] = useState('');
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem('token');
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     fetchIssues();
     fetchAnnouncements();
 }, []);
