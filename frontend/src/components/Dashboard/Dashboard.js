@@ -18,7 +18,8 @@ const Dashboard = ({ user, onLogout }) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     fetchIssues();
     fetchAnnouncements();
-}, []);  const fetchIssues = async () => {
+}, []);
+  const fetchIssues = async () => {
     try {
       const response = await axios.get(`${API_URL}/issues`, {
         headers: { Authorization: `Bearer ${token}` },
