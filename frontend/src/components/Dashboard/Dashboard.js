@@ -17,8 +17,7 @@ const Dashboard = ({ user, onLogout }) => {
   useEffect(() => {
     fetchIssues();
     fetchAnnouncements();
-  }, []);
-
+}, [fetchIssues, fetchAnnouncements);
   const fetchIssues = async () => {
     try {
       const response = await axios.get(`${API_URL}/issues`, {
