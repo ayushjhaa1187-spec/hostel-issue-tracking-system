@@ -15,10 +15,10 @@ const Dashboard = ({ user, onLogout }) => {
   const token = localStorage.getItem('token');
 
   useEffect(() => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     fetchIssues();
     fetchAnnouncements();
-}, [fetchIssues, fetchAnnouncements)];
-  const fetchIssues = async () => {
+}, []);  const fetchIssues = async () => {
     try {
       const response = await axios.get(`${API_URL}/issues`, {
         headers: { Authorization: `Bearer ${token}` },
