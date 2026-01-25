@@ -28,9 +28,15 @@ jobs:
       - name: Build React app
         working-directory: ./frontend
         run: npm run build
+              
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./frontend/build
       
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: actions/deploy-pages@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./frontend/build
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+
