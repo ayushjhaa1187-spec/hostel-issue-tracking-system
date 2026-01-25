@@ -1,0 +1,1 @@
+{\n  \"buildCommand\": \"cd frontend && npm install && npm run build\",\n  \"outputDirectory\": \"frontend/build\",\n  \"framework\": \"react\",\n  \"env\": {\n    \"REACT_APP_API_URL\": \"@react_app_api_url\"\n  },\n  \"rewrites\": [\n    {\n      \"source\": \"/(.*)\",\n      \"destination\": \"/index.html\"\n    }\n  ]\n}
