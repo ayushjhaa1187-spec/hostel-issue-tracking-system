@@ -32,8 +32,7 @@ function App() {
   }
 
   return (
-    <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
-      <Router>
+      <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>      <Router>
         <Routes>
           <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <Login setUser={setUser} />} />
           <Route path="/signup" element={user ? <Navigate to="/dashboard" /> : <SignUp setUser={setUser} />} />
