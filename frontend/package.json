@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Frontend for Smart Hostel Issue Tracking System",
   "private": true,
-    "homepage": "https://ayushjhaa1187-spec.github.io/hostel-issue-tracking-system/",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
