@@ -3,7 +3,7 @@
   "outputDirectory": "frontend/build",
     "installCommand": "cd frontend && npm install",
  "env": {
-    "REACT_APP_API_URL": "@react_app_api_url"
+    "REACT_APP_API_URL": "@react_app_api_url" 
   },
   "rewrites": [
     {
