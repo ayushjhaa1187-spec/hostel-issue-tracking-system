@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../Dashboard/Dashboard.css';
+import AnalyticsDashboard from '../../pages/AnalyticsDashboard';
+import LostFoundPage from '../../pages/LostFoundPage';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -90,6 +92,18 @@ const Dashboard = ({ user, onLogout }) => {
           >
             Announcements
           </button>
+               <button 
+ className={`tab ${activeTab === 'analytics' ? 'active' : ''}`}
+ onClick={() => setActiveTab('analytics')}
+ >
+ Analytics
+ </button>
+ <button 
+ className={`tab ${activeTab === 'lostfound' ? 'active' : ''}`}
+ onClick={() => setActiveTab('lostfound')}
+ >
+ Lost & Found
+ </button>
         </div>
 
         {activeTab === 'issues' && (
@@ -153,6 +167,8 @@ const Dashboard = ({ user, onLogout }) => {
               </div>
             ))}
           </div>
+      {activeTab === 'analytics' && <AnalyticsDashboard />}
+      {activeTab === 'lostfound' && <LostFoundPage />}
         )}
       </div>
     </div>
