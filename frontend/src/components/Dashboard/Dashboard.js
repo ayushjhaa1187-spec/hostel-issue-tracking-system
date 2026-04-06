@@ -3,6 +3,7 @@ import axios from 'axios';
 import '../Dashboard/Dashboard.css';
 import AnalyticsDashboard from '../../pages/AnalyticsDashboard';
 import LostFoundPage from '../../pages/LostFoundPage';
+import { supabase } from '../../utils/supabaseClient';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -15,19 +16,35 @@ const Dashboard = ({ user, onLogout }) => {
   const [location, setLocation] = useState('');
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem('token');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     fetchIssues();
     fetchAnnouncements();
-}, []);
+    
+    // Subscribe to realtime updates from Supabase
+    const subscription = supabase
+      .channel('public:issues')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'issues' }, () => {
+        fetchIssues();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
+    };
+  }, []);
+
   const fetchIssues = async () => {
     try {
-      const response = await axios.get(`${API_URL}/issues`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setIssues(response.data);
+      const { data, error } = await supabase
+        .from('issues')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setIssues(data || []);
     } catch (err) {
-      console.error('Error fetching issues:', err);
+      console.error('Error fetching issues from Supabase:', err);
     }
   };
 
@@ -46,17 +63,24 @@ const Dashboard = ({ user, onLogout }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(
-        `${API_URL}/issues`,
-        { title, description, location },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const { error } = await supabase
+        .from('issues')
+        .insert([{ 
+          title, 
+          description, 
+          location, 
+          status: 'Open',
+          user_id: user?.id || user?._id,
+          created_at: new Date().toISOString()
+        }]);
+
+      if (error) throw error;
       setTitle('');
       setDescription('');
       setLocation('');
-      fetchIssues();
+      // No need to call fetchIssues since we have a subscription
     } catch (err) {
-      console.error('Error creating issue:', err);
+      console.error('Error creating issue in Supabase:', err);
     } finally {
       setLoading(false);
     }
@@ -167,9 +191,10 @@ const Dashboard = ({ user, onLogout }) => {
               </div>
             ))}
           </div>
-      {activeTab === 'analytics' && <AnalyticsDashboard />}
-      {activeTab === 'lostfound' && <LostFoundPage />}
         )}
+        
+        {activeTab === 'analytics' && <AnalyticsDashboard />}
+        {activeTab === 'lostfound' && <LostFoundPage />}
       </div>
     </div>
   );
